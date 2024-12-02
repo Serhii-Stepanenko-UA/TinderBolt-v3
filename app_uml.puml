@@ -1,0 +1,90 @@
+@startuml
+class com.javarush.telegram.TinderBoltApp {
++ {static} String TELEGRAM_BOT_NAME
++ {static} String TELEGRAM_BOT_TOKEN
++ {static} String OPEN_AI_TOKEN
++ DialogMode mode
+- List<String> chat
+- UserInfo myInfo
+- UserInfo personInfo
+- int questionNumber
++ ChatGPTService gptService
++ void onUpdateEventReceived(Update)
+- void askQuestion(String,UserInfo,String)
++ {static} void main(String[])
+}
+
+
+enum com.javarush.telegram.DialogMode {
++  MAIN
++  PROFILE
++  OPENER
++  MESSAGE
++  DATE
++  GPT
+}
+
+class com.javarush.telegram.UserInfo {
++ String name
++ String sex
++ String age
++ String city
++ String occupation
++ String hobby
++ String handsome
++ String wealth
++ String annoys
++ String goals
+- String fieldToString(String,String)
++ String toString()
+}
+
+
+class com.javarush.telegram.MultiSessionTelegramBot {
+- String name
+- String token
+- ThreadLocal<Update> updateEvent
++ String getBotUsername()
++ String getBotToken()
++ void onUpdateReceived(Update)
++ void onUpdateEventReceived(Update)
++ Long getCurrentChatId()
++ String getMessageText()
++ boolean isMessageCommand()
++ String getCallbackQueryButtonKey()
++ Message sendTextMessage(String)
++ Message sendPhotoMessage(String)
++ Message sendPhotoTextMessage(String,String)
++ void updateTextMessage(Message,String)
++ Message sendTextButtonsMessage(String,String)
++ void sendTextButtonsMessage(String,List<String>)
++ void showMainMenu(String)
++ void hideMainMenu()
++ List<List<PhotoSize>> getUserProfilePhotos()
++ List<List<PhotoSize>> getChatBotProfilePhotos()
+- SendMessage createApiSendMessageCommand(String)
+- void attachButtons(SendMessage,List<String>)
+- SendPhoto createApiPhotoMessageCommand(String,String)
++ {static} String loadPrompt(String)
++ {static} String loadMessage(String)
++ {static} InputStream loadImage(String)
+- T executeTelegramApiMethod(Method)
+- Message executeTelegramApiMethod(SendPhoto)
+}
+
+
+class com.javarush.telegram.ChatGPTService {
+- ChatGPT chatGPT
+- List<Message> messageHistory
++ String sendMessage(String,String)
++ void setPrompt(String)
++ String addMessage(String)
+- String sendMessagesToChatGPT()
+}
+
+
+
+
+com.javarush.telegram.MultiSessionTelegramBot <|-- com.javarush.telegram.TinderBoltApp
+org.telegram.telegrambots.bots.TelegramLongPollingBot <|-- com.javarush.telegram.MultiSessionTelegramBot
+@enduml
